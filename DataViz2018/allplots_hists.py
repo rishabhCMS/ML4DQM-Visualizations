@@ -8,21 +8,21 @@ Created on Fri Sep  6 15:20:04 2019
 
 import pandas as pd
 import matplotlib.pyplot as plt
-#import numpy as np
+import numpy as np
 import os
 
 def plots(x, quantile, title):
     
-    plt.figure()
+    fig = plt.figure()
     plt.xlabel("{}".format(quantile))
     plt.ylabel("Quantile_Value")
     plt.title(title)
     #plt.text(0.9, 0.9, r'$\mu=100,\ \sigma=15$')
-    plt.hist(x, 50, density=True, facecolor='g', alpha=0.75)
+    plt.hist(x, density=True, facecolor='g', alpha=0.75)
     plt.grid(True)
     # plt.show()
-    plt.savefig('{}.png'.format(title))
-    
+    fig.savefig('{}.png'.format(title))
+    del fig
 if __name__ == "__main__":
     
     '''feature declaration as per the twiki'''
@@ -142,46 +142,45 @@ if __name__ == "__main__":
     '''new DFs with new cols'''
 
     df_EGamma_new = df_EGamma[new_cols_egamma]
-    df_ZeroBias_new = df_ZeroBias[new_cols_zerobias]
-    df_JetHT_new = df_JetHT[new_cols_jetht]
-    df_SingleMuon_new = df_SingleMuon[new_cols_singlemuon]
+    df_finite_EGamma = df_EGamma_new.fillna(0)
+    df_finite_EGamma_limit = df_finite_EGamma[df_finite_EGamma["EventsPerLs"] > 500]
     
+    df_ZeroBias_new = df_ZeroBias[new_cols_zerobias]
+    df_finite_ZeroBias = df_ZeroBias_new.fillna(0)
+    df_finite_ZeroBias_limit = df_finite_ZeroBias[df_finite_ZeroBias["EventsPerLs"] > 500]
+    
+    df_JetHT_new = df_JetHT[new_cols_jetht]
+    df_finite_JetHT = df_JetHT_new.fillna(0)
+    df_finite_JetHT_limit = df_finite_JetHT[df_finite_JetHT["EventsPerLs"] > 500]
+    
+    df_SingleMuon_new = df_SingleMuon[new_cols_singlemuon]
+    df_finite_SingleMuon = df_SingleMuon_new.fillna(0)
+    df_finite_SingleMuon_limit = df_finite_SingleMuon[df_finite_SingleMuon["EventsPerLs"] > 500]
     
     '''finding unique run numbers'''
-    run_numbers_egamma = df_EGamma_new["runId"].unique().tolist()
-    run_numbers_zerobias = df_ZeroBias_new["runId"].unique().tolist()
-    run_numbers_singlemuon = df_SingleMuon_new["runId"].unique().tolist()
-    run_numbers_jetht = df_JetHT_new["runId"].unique().tolist()
+    run_numbers_egamma = df_finite_EGamma_limit["runId"].unique().tolist()
+    run_numbers_zerobias = df_finite_ZeroBias_limit["runId"].unique().tolist()
+    run_numbers_singlemuon = df_finite_SingleMuon_limit["runId"].unique().tolist()
+    run_numbers_jetht = df_finite_JetHT_limit["runId"].unique().tolist()
     
     
     '''plotting the hists'''
     for run_number in run_numbers_egamma:
-        df_test = df_EGamma_new[df_EGamma_new["runId"] == run_number]
+        df_test = df_finite_EGamma_limit[df_finite_EGamma_limit["runId"] == run_number]
         for quantile in cols_egamma:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_egamma_Hist".format(run_number,quantile))
             
     for run_number in run_numbers_jetht:
-        df_test = df_JetHT_new[df_JetHT_new["runId"] == run_number]
+        df_test = df_finite_JetHT_limit[df_finite_JetHT_limit["runId"] == run_number]
         for quantile in cols_jetht:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_jetht_Hist".format(run_number,quantile))
         
-    for run_number in run_numbers_zerobias:
-        df_test = df_ZeroBias_new[df_ZeroBias_new["runId"] == run_number]
+    for run_number in run_numbers_zerobias_limit:
+        df_test = df_finite_ZeroBias_limit[df_finite_ZeroBias_limit["runId"] == run_number]
         for quantile in cols_zerobias:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_zerobias_Hist".format(run_number,quantile))
             
     for run_number in run_numbers_singlemuon:
-        df_test = df_SingleMuon_new[df_SingleMuon_new["runId"] == run_number]
+        df_test = df_finite_SingleMuon_limit[df_finite_SingleMuon_limit["runId"] == run_number]
         for quantile in cols_singlemuon:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_singlemuon_Hist".format(run_number,quantile))
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
