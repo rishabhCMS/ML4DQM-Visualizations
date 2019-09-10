@@ -175,7 +175,7 @@ if __name__ == "__main__":
         for quantile in cols_jetht:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_jetht_Hist".format(run_number,quantile))
         
-    for run_number in run_numbers_zerobias_limit:
+    for run_number in run_numbers_zerobias:
         df_test = df_finite_ZeroBias_limit[df_finite_ZeroBias_limit["runId"] == run_number]
         for quantile in cols_zerobias:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_zerobias_Hist".format(run_number,quantile))
