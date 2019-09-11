@@ -166,24 +166,24 @@ if __name__ == "__main__":
     
     '''plotting the hists'''
     
-    os.mkdir("/eos/user/r/runiyal/ML4DQM_Histograms/bad_dcs_histograms/egamma/")
-    os.chdir("/eos/user/r/runiyal/ML4DQM_Histograms/bad_dcs_histograms/egamma/")
+    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/egamma/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/egamma/")
     for run_number in run_numbers_egamma:
         df_test = df_finite_EGamma_limit[df_finite_EGamma_limit["runId"] == run_number]
         for quantile in cols_egamma:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_eg".format(run_number,quantile))
     
-    os.chdir("/eos/user/r/runiyal/ML4DQM_Histograms/bad_dcs_histograms/")
-    os.mkdir("/eos/user/r/runiyal/ML4DQM_Histograms/bad_dcs_histograms/jetht/")
-    os.chdir("/eos/user/r/runiyal/ML4DQM_Histograms/bad_dcs_histograms/jetht/")        
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/")
+    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/jetht/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/jetht/")        
     for run_number in run_numbers_jetht:
         df_test = df_finite_JetHT_limit[df_finite_JetHT_limit["runId"] == run_number]
         for quantile in cols_jetht:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_jtht".format(run_number,quantile))
 
-    os.chdir("/eos/user/r/runiyal/ML4DQM_Histograms/bad_dcs_histograms/")
-    os.mkdir("/eos/user/r/runiyal/ML4DQM_Histograms/bad_dcs_histograms/zerobias/")
-    os.chdir("/eos/user/r/runiyal/ML4DQM_Histograms/bad_dcs_histograms/zerobias/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/")
+    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/zerobias/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/zerobias/")
         
     for run_number in run_numbers_zerobias:
         df_test = df_finite_ZeroBias_limit[df_finite_ZeroBias_limit["runId"] == run_number]
@@ -191,9 +191,9 @@ if __name__ == "__main__":
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_zb".format(run_number,quantile))
 
 
-    os.chdir("/eos/user/r/runiyal/ML4DQM_Histograms/bad_dcs_histograms/")
-    os.mkdir("/eos/user/r/runiyal/ML4DQM_Histograms/bad_dcs_histograms/singlemuon/")
-    os.chdir("/eos/user/r/runiyal/ML4DQM_Histograms/bad_dcs_histograms/singlemuon/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/")
+    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/singlemuon/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/singlemuon/")
     for run_number in run_numbers_singlemuon:
         df_test = df_finite_SingleMuon_limit[df_finite_SingleMuon_limit["runId"] == run_number]
         for quantile in cols_singlemuon:
