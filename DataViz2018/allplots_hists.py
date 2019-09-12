@@ -10,6 +10,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+import time
 
 def plots(x, quantile, title):
     
@@ -26,7 +27,7 @@ def plots(x, quantile, title):
 if __name__ == "__main__":
     
     '''feature declaration as per the twiki'''
-    
+    start = time.time()
     features_new_egamma = ["qpVtxChi2",
                     "qpVtxNtr",
                     "qPUEvt",
@@ -54,7 +55,7 @@ if __name__ == "__main__":
                            "qMuEn",
                            "qMuChi2"]
 
-    features_new_jetht = ["qpVtxChi2",
+    features_new_jetht_1 = ["qpVtxChi2",
                       "qpVtxNtr",
                       "qPUEvt",
                       "qlumiEvt",
@@ -70,8 +71,8 @@ if __name__ == "__main__":
                       "qCalJetPhi",
                       "qCalJetEn",
                       "qCalMETPt",
-                      "qCalMETPhi",
-                      "qCCEn",
+                      "qCalMETPhi",]
+    features_new_jetht_2 = ["qCCEn",
                       "qCCEta",
                       "qCCPhi",
                       "qSCEn",
@@ -124,12 +125,19 @@ if __name__ == "__main__":
     new_cols_zerobias = []
     new_cols_zerobias = cols_zerobias + ["lumiId", "lumi", "EventsPerLs", "runId"]
     
-    cols_jetht = []
-    for feature in features_new_jetht:
+    cols_jetht_1 = []
+    for feature in features_new_jetht_1:
         a = [col for col in df_JetHT.columns if "{}".format(feature) in col] 
-        cols_jetht = cols_jetht + a
-    new_cols_jetht = []
-    new_cols_jetht = cols_jetht + ["lumiId", "lumi", "EventsPerLs", "runId"]
+        cols_jetht_1 = cols_jetht_1 + a
+    new_cols_jetht_1 = []
+    new_cols_jetht_1 = cols_jetht_1 + ["lumiId", "lumi", "EventsPerLs", "runId"]
+
+    cols_jetht_2 = []
+    for feature in features_new_jetht_2:
+        a = [col for col in df_JetHT.columns if "{}".format(feature) in col] 
+        cols_jetht_2 = cols_jetht_2 + a
+    new_cols_jetht_2 = []
+    new_cols_jetht_2 = cols_jetht_2 + ["lumiId", "lumi", "EventsPerLs", "runId"]
     
     cols_singlemuon = []
     for feature in features_new_egamma:
@@ -149,9 +157,13 @@ if __name__ == "__main__":
     df_finite_ZeroBias = df_ZeroBias_new.fillna(0)
     df_finite_ZeroBias_limit = df_finite_ZeroBias[df_finite_ZeroBias["EventsPerLs"] > 500]
     
-    df_JetHT_new = df_JetHT[new_cols_jetht]
-    df_finite_JetHT = df_JetHT_new.fillna(0)
-    df_finite_JetHT_limit = df_finite_JetHT[df_finite_JetHT["EventsPerLs"] > 500]
+    df_JetHT_new_1 = df_JetHT[new_cols_jetht_1]
+    df_finite_JetHT_1 = df_JetHT_new_1.fillna(0)
+    df_finite_JetHT_limit_1 = df_finite_JetHT_1[df_finite_JetHT_1["EventsPerLs"] > 500]
+    
+    df_JetHT_new_2 = df_JetHT[new_cols_jetht_2]
+    df_finite_JetHT_2 = df_JetHT_new_2.fillna(0)
+    df_finite_JetHT_limit_2 = df_finite_JetHT_2[df_finite_JetHT_2["EventsPerLs"] > 500]
     
     df_SingleMuon_new = df_SingleMuon[new_cols_singlemuon]
     df_finite_SingleMuon = df_SingleMuon_new.fillna(0)
@@ -161,29 +173,45 @@ if __name__ == "__main__":
     run_numbers_egamma = df_finite_EGamma_limit["runId"].unique().tolist()
     run_numbers_zerobias = df_finite_ZeroBias_limit["runId"].unique().tolist()
     run_numbers_singlemuon = df_finite_SingleMuon_limit["runId"].unique().tolist()
-    run_numbers_jetht = df_finite_JetHT_limit["runId"].unique().tolist()
-    
+    run_numbers_jetht_1 = df_finite_JetHT_limit_1["runId"].unique().tolist()
+    run_numbers_jetht_2 = df_finite_JetHT_limit_2["runId"].unique().tolist()
     
     '''plotting the hists'''
     
-    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/egamma/")
-    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/egamma/")
+    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/egamma/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/egamma/")
     for run_number in run_numbers_egamma:
         df_test = df_finite_EGamma_limit[df_finite_EGamma_limit["runId"] == run_number]
         for quantile in cols_egamma:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_eg".format(run_number,quantile))
     
-    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/")
-    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/jetht/")
-    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/jetht/")        
-    for run_number in run_numbers_jetht:
-        df_test = df_finite_JetHT_limit[df_finite_JetHT_limit["runId"] == run_number]
-        for quantile in cols_jetht:
+    #source = "/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/egamma/"
+    #destination = "/eos/user/r/runiyal/ML4DQM_Histograms/bad_dcs_histograms/egamma/"
+    #for file_ in os.listdir(source):
+        #shutil.move(os.path.join(source,file_), destination)
+    #print("the egamma histograms have been moved to {}".format(destination)) 
+    
+    
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/")
+    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/jetht_1/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/jetht_1/")        
+    for run_number in run_numbers_jetht_1:
+        df_test = df_finite_JetHT_limit_1[df_finite_JetHT_limit_1["runId"] == run_number]
+        for quantile in cols_jetht_1:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_jtht".format(run_number,quantile))
 
-    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/")
-    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/zerobias/")
-    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/zerobias/")
+    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/jetht_2/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/jetht_2/")        
+    for run_number in run_numbers_jetht_2:
+        df_test = df_finite_JetHT_limit_2[df_finite_JetHT_limit_2["runId"] == run_number]
+        for quantile in cols_jetht_2:
+            plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_jtht".format(run_number,quantile))
+    
+
+    
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/")
+    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/zerobias/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/zerobias/")
         
     for run_number in run_numbers_zerobias:
         df_test = df_finite_ZeroBias_limit[df_finite_ZeroBias_limit["runId"] == run_number]
@@ -191,10 +219,11 @@ if __name__ == "__main__":
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_zb".format(run_number,quantile))
 
 
-    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/")
-    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/singlemuon/")
-    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/bad_dcs_histograms/singlemuon/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/")
+    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/singlemuon/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/singlemuon/")
     for run_number in run_numbers_singlemuon:
         df_test = df_finite_SingleMuon_limit[df_finite_SingleMuon_limit["runId"] == run_number]
         for quantile in cols_singlemuon:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_sm".format(run_number,quantile))
+    print("time taken for this to complete :", time.time()-start," seconds")
