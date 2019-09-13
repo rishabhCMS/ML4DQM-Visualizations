@@ -54,7 +54,13 @@ if __name__ == "__main__":
                            "qMuPhi",
                            "qMuEn",
                            "qMuChi2"]
-
+    '''
+    
+    JetHT is separated into 3 because
+    the number of files produced for the feature 
+    is larger than the usual afs directory can store
+    
+    '''
     features_new_jetht_1 = ["qpVtxChi2",
                       "qpVtxNtr",
                       "qPUEvt",
@@ -64,15 +70,15 @@ if __name__ == "__main__":
                       "qPFJetPhi",
                       "qPFJetEta",
                       "qPFMetPt",
-                      "qPFMetPhi",
-                      "qCalJetN",
+                      "qPFMetPhi",]
+    features_new_jetht2=["qCalJetN", 
                       "qCalJetPt",
                       "qCalJetEta",
                       "qCalJetPhi",
                       "qCalJetEn",
                       "qCalMETPt",
                       "qCalMETPhi",]
-    features_new_jetht_2 = ["qCCEn",
+    features_new_jetht_3 = ["qCCEn",
                       "qCCEta",
                       "qCCPhi",
                       "qSCEn",
