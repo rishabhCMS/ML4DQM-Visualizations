@@ -13,16 +13,19 @@ import os
 import time
 
 def plots(x, quantile, title):
-    
+
     fig = plt.figure()
+    
     plt.xlabel("{}".format(quantile))
     plt.ylabel("Quantile_Value")
     plt.title(title)
     #plt.text(0.9, 0.9, r'$\mu=100,\ \sigma=15$')
-    plt.hist(x, density=True, facecolor='g', alpha=0.75)
+    plt.hist(x, facecolor='g', alpha=0.75)
     plt.grid(True)
+    plt.annotate("{}".format(x.describe()), xy=(0.5, 0.5), xycoords='axes fraction')
+    
     # plt.show()
-    fig.savefig('{}.png'.format(title))
+    fig.savefig('{}.png'.format(title), bbox_inches = "tight")
     del fig
 if __name__ == "__main__":
     
@@ -54,13 +57,7 @@ if __name__ == "__main__":
                            "qMuPhi",
                            "qMuEn",
                            "qMuChi2"]
-    '''
-    
-    JetHT is separated into 3 because
-    the number of files produced for the feature 
-    is larger than the usual afs directory can store
-    
-    '''
+
     features_new_jetht_1 = ["qpVtxChi2",
                       "qpVtxNtr",
                       "qPUEvt",
@@ -71,7 +68,7 @@ if __name__ == "__main__":
                       "qPFJetEta",
                       "qPFMetPt",
                       "qPFMetPhi",]
-    features_new_jetht2=["qCalJetN", 
+    features_new_jetht_2 =  ["qCalJetN",
                       "qCalJetPt",
                       "qCalJetEta",
                       "qCalJetPhi",
@@ -140,10 +137,18 @@ if __name__ == "__main__":
 
     cols_jetht_2 = []
     for feature in features_new_jetht_2:
-        a = [col for col in df_JetHT.columns if "{}".format(feature) in col] 
+        a = [col for col in df_JetHT.columns if "{}".format(feature) in col]
         cols_jetht_2 = cols_jetht_2 + a
     new_cols_jetht_2 = []
     new_cols_jetht_2 = cols_jetht_2 + ["lumiId", "lumi", "EventsPerLs", "runId"]
+
+
+    cols_jetht_3 = []
+    for feature in features_new_jetht_3:
+        a = [col for col in df_JetHT.columns if "{}".format(feature) in col] 
+        cols_jetht_3 = cols_jetht_3 + a
+    new_cols_jetht_3 = []
+    new_cols_jetht_3 = cols_jetht_3 + ["lumiId", "lumi", "EventsPerLs", "runId"]
     
     cols_singlemuon = []
     for feature in features_new_egamma:
@@ -170,7 +175,10 @@ if __name__ == "__main__":
     df_JetHT_new_2 = df_JetHT[new_cols_jetht_2]
     df_finite_JetHT_2 = df_JetHT_new_2.fillna(0)
     df_finite_JetHT_limit_2 = df_finite_JetHT_2[df_finite_JetHT_2["EventsPerLs"] > 500]
-    
+    df_JetHT_new_3 = df_JetHT[new_cols_jetht_3]
+    df_finite_JetHT_3 = df_JetHT_new_3.fillna(0)
+    df_finite_JetHT_limit_3 = df_finite_JetHT_3[df_finite_JetHT_3["EventsPerLs"] > 500]    
+
     df_SingleMuon_new = df_SingleMuon[new_cols_singlemuon]
     df_finite_SingleMuon = df_SingleMuon_new.fillna(0)
     df_finite_SingleMuon_limit = df_finite_SingleMuon[df_finite_SingleMuon["EventsPerLs"] > 500]
@@ -181,7 +189,7 @@ if __name__ == "__main__":
     run_numbers_singlemuon = df_finite_SingleMuon_limit["runId"].unique().tolist()
     run_numbers_jetht_1 = df_finite_JetHT_limit_1["runId"].unique().tolist()
     run_numbers_jetht_2 = df_finite_JetHT_limit_2["runId"].unique().tolist()
-    
+    run_numbers_jetht_3 = df_finite_JetHT_limit_3["runId"].unique().tolist()
     '''plotting the hists'''
     
     os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/egamma/")
@@ -213,6 +221,12 @@ if __name__ == "__main__":
         for quantile in cols_jetht_2:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_jtht".format(run_number,quantile))
     
+    os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/jetht_3/")
+    os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/jetht_3/")
+    for run_number in run_numbers_jetht_3:
+        df_test = df_finite_JetHT_limit_3[df_finite_JetHT_limit_3["runId"] == run_number]
+        for quantile in cols_jetht_3:
+            plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_jtht".format(run_number,quantile))
 
     
     os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/")
@@ -224,7 +238,7 @@ if __name__ == "__main__":
         for quantile in cols_zerobias:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_zb".format(run_number,quantile))
 
-
+    
     os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/")
     os.mkdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/singlemuon/")
     os.chdir("/afs/cern.ch/work/r/runiyal/ML4DQM/CMS_DC_ANOMALY/dataViz2018/good_data_histograms/singlemuon/")
@@ -232,4 +246,5 @@ if __name__ == "__main__":
         df_test = df_finite_SingleMuon_limit[df_finite_SingleMuon_limit["runId"] == run_number]
         for quantile in cols_singlemuon:
             plots(df_test[quantile],"{}".format(quantile) ,"{}_{}_sm".format(run_number,quantile))
+    
     print("time taken for this to complete :", time.time()-start," seconds")
