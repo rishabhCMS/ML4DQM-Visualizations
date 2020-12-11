@@ -109,6 +109,7 @@ def occupancy_extract_plot(df, path):
 
 if __name__ == '__main__':
 
+    # just change the name of the csv file for each layer
     path_to_csv_file = "digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_1.csv"
     path_to_save_plots = "/afs/cern.ch/work/r/runiyal/occupancy_mldqm/occupancy_plots/zerobias2017B"
     df = pd.read_csv(path_to_csv_file, header=None)
