@@ -29,7 +29,7 @@ run the following commands to get individual hist for each layer (these commands
 - [x] `grep digi_occupancy_per_SignedDiskCoord_per_SignedBladePanelCoord_PXRing_2 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /afs/cern.ch/work/r/runiyal/occupancy_mldqm/digi_occupancy_per_SignedDiskCoord_per_SignedBladePanelCoord_PXRing_2.csv`
 
 
-**Now Follow the [Script](https://github.com/rishabhCMS/ML4DQM-Visualizations/commit/34be72bd6cd6e917fc761325e8b004f760cfe3e0#diff-fa7773b2c3e80c0c76c56f95aa9537c572722fd16abc96e46001701bb1875530)**
+**Now Follow the [Script](https://github.com/rishabhCMS/ML4DQM-Visualizations/blob/master/OccupancyPlots/plot_occupancy.py)**
 
 
 
