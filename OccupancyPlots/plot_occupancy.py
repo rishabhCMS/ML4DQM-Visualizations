@@ -30,14 +30,14 @@ def occupancy_extract_plot(df, path):
     this plots the 2d hists dropping the overflow and underflow bins
     '''
 
-    df_occupancy  = df[df['hname'].str.contains("occupancy")]
-    df_occupancy.set_index(['fromrun','fromlumi'], inplace=True, drop=False)
-    df_occupancy.sort_index(inplace=True)
+#     df_occupancy  = df[df['hname'].str.contains("occupancy")]
+    df.set_index(['fromrun','fromlumi'], inplace=True, drop=False)
+    df.sort_index(inplace=True)
     
-    for layer in df_occupancy.hname.unique():
+    for layer in df.hname.unique():
         layer_name = layer.split('_')[-2]
         layer_num = layer.split('_')[-1]
-        df_sample = df_occupancy.loc[df_occupancy["hname"] == layer]
+        df_sample = df  
 #        if layer_num != '1':continue
         
         for index, row in df_sample.iterrows():
