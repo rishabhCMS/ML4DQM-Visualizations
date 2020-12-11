@@ -31,7 +31,7 @@ def occupancy_extract_plot(df, path):
     '''
 
 #     df_occupancy  = df[df['hname'].str.contains("occupancy")]
-    df.set_index(['fromrun','fromlumi'], inplace=True, drop=False)
+    df.set_index(['run','LS'], inplace=True, drop=False)
     df.sort_index(inplace=True)
     
     for layer in df.hname.unique():
@@ -109,7 +109,7 @@ def occupancy_extract_plot(df, path):
 
 if __name__ == '__main__':
 
-    path_to_csv_file = "/afs/cern.ch/work/r/runiyal/occupancy_mldqm/data/ZeroBias_2017B_DataFrame_2D_1.csv"
+    path_to_csv_file = "digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_1.csv"
     path_to_save_plots = "/afs/cern.ch/work/r/runiyal/occupancy_mldqm/occupancy_plots/zerobias2017B"
     df = pd.read_csv(path_to_csv_file)
     
