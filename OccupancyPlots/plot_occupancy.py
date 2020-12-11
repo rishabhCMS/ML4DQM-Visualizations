@@ -111,7 +111,10 @@ if __name__ == '__main__':
 
     path_to_csv_file = "digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_1.csv"
     path_to_save_plots = "/afs/cern.ch/work/r/runiyal/occupancy_mldqm/occupancy_plots/zerobias2017B"
-    df = pd.read_csv(path_to_csv_file)
+    df = pd.read_csv(path_to_csv_file, header=None)
+    cols = ['dataset','run', 'LS', 'hname', 'histo', 'entries', 'Xmax', 'Xmin',
+       'Xbins', 'Ymax', 'Ymin', 'Ybins']
+    df.columns = cols
     
     if not os.path.isdir(path_to_save_plots):
         os.makedirs(path_to_save_plots)
