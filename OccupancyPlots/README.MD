@@ -9,40 +9,28 @@
 2. Update [2.0](https://docs.google.com/presentation/d/19U0MUbsW3J7Fnxp21Mkj-QTmAJXrof_T7eGGSDzGjWw/edit#slide=id.gac7122847d_0_2)
 ````console
 ssh -XY username@lxplus.cern.ch
-ssh ibmminsky-2
-python plot_occupancy.py
+ssh ibmminsky-3
+cd /afs/cern/ch/work/r/runiyal/occupancy_mldqm/
 ````
 ### Before you start plotting 
 
-run the following commands to get individual hist for each layer
+run the following commands to get individual hist for each layer (these commands may take time)
 
-- [x]  `grep digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_1 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /eos/home-r/runiyal/SWAN_projects/ML4DC/occupancy/digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_1.csv`
+- [x]  `grep digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_1 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /afs/cern.ch/work/r/runiyal/occupancy_mldqm/digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_1.csv`
 
-- [x] `grep digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_1 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /eos/home-r/runiyal/SWAN_projects/ML4DC/occupancy/digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_2.csv`
+- [x] `grep digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_1 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /afs/cern.ch/work/r/runiyal/occupancy_mldqm/digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_2.csv`
 
-- [x] `grep digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_3 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /eos/home-r/runiyal/SWAN_projects/ML4DC/occupancy/digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_3.csv`
+- [x] `grep digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_3 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /afs/cern.ch/work/r/runiyal/occupancy_mldqm/digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_3.csv`
 
-- [x] `grep digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_4 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /eos/home-r/runiyal/SWAN_projects/ML4DC/occupancy/digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_4.csv`
+- [x] `grep digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_4 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /afs/cern.ch/work/r/runiyal/occupancy_mldqm/digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_4.csv`
 
-- [x] `grep digi_occupancy_per_SignedDiskCoord_per_SignedBladePanelCoord_PXRing_1 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /eos/home-r/runiyal/SWAN_projects/ML4DC/occupancy/digi_occupancy_per_SignedDiskCoord_per_SignedBladePanelCoord_PXRing_1.csv`
+- [x] `grep digi_occupancy_per_SignedDiskCoord_per_SignedBladePanelCoord_PXRing_1 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /afs/cern.ch/work/r/runiyal/occupancy_mldqm/digi_occupancy_per_SignedDiskCoord_per_SignedBladePanelCoord_PXRing_1.csv`
 
-- [x] `grep digi_occupancy_per_SignedDiskCoord_per_SignedBladePanelCoord_PXRing_2 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /eos/home-r/runiyal/SWAN_projects/ML4DC/occupancy/digi_occupancy_per_SignedDiskCoord_per_SignedBladePanelCoord_PXRing_2.csv`
+- [x] `grep digi_occupancy_per_SignedDiskCoord_per_SignedBladePanelCoord_PXRing_2 /eos/project/c/cmsml4dc/ML_2020/UL2017_Data/DF2017B_2D_Complete/*.csv > /afs/cern.ch/work/r/runiyal/occupancy_mldqm/digi_occupancy_per_SignedDiskCoord_per_SignedBladePanelCoord_PXRing_2.csv`
 
-````python
-import pandas as pd
-import glob
-import os 
-import sys
-import csv
-from numba import njit
-csv.field_size_limit(sys.maxsize)
 
-cols = ['dataset','run', 'LS', 'hname', 'histo', 'entries', 'Xmax', 'Xmin',
-       'Xbins', 'Ymax', 'Ymin', 'Ybins']
-       
-df_layer1 = pd.read_csv('digi_occupancy_per_SignedModuleCoord_per_SignedLadderCoord_PXLayer_1.csv', header=None)
+**Now Follow the [Script](https://github.com/rishabhCMS/ML4DQM-Visualizations/commit/34be72bd6cd6e917fc761325e8b004f760cfe3e0#diff-fa7773b2c3e80c0c76c56f95aa9537c572722fd16abc96e46001701bb1875530)**
 
-````
 
 
 ### Layer 1 
